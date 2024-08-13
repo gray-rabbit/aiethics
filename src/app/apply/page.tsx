@@ -40,15 +40,35 @@ export default function ApplyPage() {
         const nAnswer = { ...answer };
         const num = newAnswer.question_num;
         nAnswer[num] = newAnswer;
-        update(nAnswer);
 
-        //여기서 완료되면 서버로 전송하는 코드를 넣어야함.
-        if (questions.length > count) {
-            setCount(count + 1);
-        } else {
-            console.log("완료");
-            console.log(nAnswer);
+        //모든 문항이 완료되었는지 확인하는 코드
+        let idx = -1;
+        for (const k in nAnswer) {
+            if (nAnswer[k].answer === -1) {
+                idx = Number(k);
+                break;
+            }
         }
+        if (idx === -1) {//이 상황은 완료된 상황이다.
+            console.log("완료");
+            // TODO: 서버로 전송하는 코드를 넣는다. 
+            return;
+        }
+        if (questions.length > count) {
+            let newCount = count;
+            console.log(newCount, count, nAnswer[newCount].answer);
+            while (nAnswer[newCount] && nAnswer[newCount].answer !== -1) {
+                newCount++;
+            }
+            if (questions.length >= newCount) {
+                setCount(newCount);
+            } else {
+                setCount(idx);
+            }
+        } else {
+            setCount(idx);
+        }
+        update(nAnswer);
     }
     useEffect(() => {
         console.log(user);
@@ -65,10 +85,14 @@ export default function ApplyPage() {
                 const answerData = {} as {
                     [key: number]: { question_num: number, answer: number, reason: string }
                 };
+
+                //초기화 코드 나중에 다시 되살려야함
                 data.map((k: Question) => {
                     answerData[k.question_num] = {
                         question_num: k.question_num,
-                        answer: -1,
+                        //여기를 되살려야함
+                        // answer: -1,
+                        answer: Math.floor(Math.random() * 2) + 1,
                         reason: ""
                     }
                     console.log(k.question_num);
