@@ -125,9 +125,59 @@ export default function ApplyPage() {
         }
         if (!flag) {
             console.log("이건 완료니까 다음 페이지로");
-            router.push("/apply/send");
+            const send_db = async () => {
+                const { age, gender, grade, region, schoolName } = user;
+                let age_fixed = 0
+                if (user.age === "1학년") age_fixed = 1
+                else if (user.age === "2학년") age_fixed = 2
+                else if (user.age === "3학년") age_fixed = 3
+                else if (user.age === "4학년") age_fixed = 4
+                else if (user.age === "5학년") age_fixed = 5
+                else if (user.age === "6학년") age_fixed = 6
+                else if (user.age === "20대") age_fixed = 21
+                else if (user.age === "30대") age_fixed = 31
+                else if (user.age === "40대") age_fixed = 41
+                else if (user.age === "50대") age_fixed = 51
+                else if (user.age === "60대") age_fixed = 61
+
+                if (user.grade === "초등학생") age_fixed += 8
+                else if (user.grade === "중학생") age_fixed += 13
+                else if (user.grade === "고등학생") age_fixed += 16
+
+                const { error, data } = await supaclient.from("participants").insert({
+                    gender: gender === "남자" ? 1 : 2,
+                    grade: grade,
+                    region: region,
+                    schoolname: schoolName,
+                    age: age_fixed,
+                    age_raw: age
+                }).select("id");
+                if (error) {
+                    // TODO: 에러 대응코드 필요하다.
+                    return
+                }
+                const query: any[] = []
+                const key = data[0].id;
+                Object.keys(answer).map(k => {
+                    const idx = Number(k);
+                    const temp = {
+                        question_id: Number(answer[idx].question_num),
+                        answer: Number(answer[idx].answer),
+                        answer_text: answer[idx].reason,
+                        user_id: Number(key)
+                    }
+                    query.push(temp);
+                })
+                const result = await supaclient.from("answers").insert(query);
+                if (result.error) {
+                    // 에러 대응코드 필요하다.
+                    return
+                }
+                router.push("/apply/result");
+            };
+            send_db();
         }
-    }, [answer]);
+    }, [user, answer, router]);
 
     return (
         <div className="h-screen bg-slate-200">
