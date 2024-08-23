@@ -120,6 +120,7 @@ export default function ApplyPage() {
         for (const k in answer) {
             if (answer[k].answer === -1) {
                 flag = true;
+                return
                 break;
             }
         }
