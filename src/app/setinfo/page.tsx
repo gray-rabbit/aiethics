@@ -73,7 +73,7 @@ export default function SetInfoPage() {
             return null;
         }
     }
-    return <div className="flex justify-center h-screen items-center ">
+    return <div className="flex justify-center h-[calc(100vh-70px)] items-center ">
         {/* 남자여자 */}
         <div className="w-[800px] bg-white p-5 text-black drop-shadow-2xl rounded-2xl">
             <p>정보를 입력하세요</p>

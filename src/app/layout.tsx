@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Head from "next/head";
+import Link from "next/link";
+import { Noto_Sans_KR } from 'next/font/google'
 
+const notoSansKr = Noto_Sans_KR({ subsets: ['latin'] })
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -17,7 +20,25 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" data-theme="lemonade">
-      <body className={inter.className}>{children}</body>
+
+      <body className={notoSansKr.className}>
+        <div className="navbar bg-base-100">
+          <div className="flex-1">
+            <Link href="/" className="btn btn-ghost text-lg">AI 도시를 부탁해</Link>
+          </div>
+
+          <div className="flex-none">
+            <ul className="menu menu-horizontal px-1">
+              <li><Link href="/">첫화면으로</Link></li>
+              <li><Link href="/setinfo">시작하기</Link></li>
+              <li><Link href="/showresult">통계보기</Link></li>
+              <li><Link href="/about">About</Link></li>
+            </ul>
+          </div>
+        </div>
+
+        {children}
+      </body>
     </html>
   );
 }
