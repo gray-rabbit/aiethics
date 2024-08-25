@@ -51,6 +51,7 @@ export default function ShowResultPage() {
                 data.map((v: any) => {
                     const gender = v.gender == 1 ? 'male' : 'female';
                     datas[v.grade].questions[v.gender][v.question_id - 1][v.answer == 1 ? 'agree' : 'disagree'] += v.count; //질문에 따라 증가
+                    datas[v.grade].questions[0][v.question_id - 1][v.answer == 1 ? 'agree' : 'disagree'] += v.count; //질문에 따라 증가
                     datas[v.age].questions[v.gender][v.question_id - 1][v.answer == 1 ? 'agree' : 'disagree'] += v.count; //질문에 따라 증가
                     datas[v.age].questions[0][v.question_id - 1][v.answer == 1 ? 'agree' : 'disagree'] += v.count; //질문에 따라 증가
 
@@ -106,14 +107,16 @@ export default function ShowResultPage() {
                         setDatas(datas);
                         setGrade("총괄");
                         setPage(2);
+                        console.log(datas);
                     })
             })
     }, [])
 
     useEffect(() => {
         if (grade == "총괄" || grade == "초등학생" || grade == "중학생" || grade == "고등학생" || grade == "일반(대학생)") {
-            set_current_data(datas[grade]);
-            console.log(datas);
+            const st = JSON.stringify(datas[grade]);
+            set_current_data(JSON.parse(st));
+            console.log(datas[grade]);
         }
     }, [grade, age]);
     const select_gender_handle = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -240,10 +243,11 @@ export default function ShowResultPage() {
         }
         {page == 2 && questions.length > 0 && Object.keys(current_data).includes("questions") && <div>
             {questions.map((v: any, idx: number) => {
-                // console.log(current_data);
+                console.log(current_data.questions);
                 // return null;
                 const agree_rate = Math.floor(current_data.questions[gender][idx].agree / (current_data.questions[gender][idx].agree + current_data.questions[gender][idx].disagree) * 100);
                 const disagree_rate = 100 - agree_rate;
+                console.log(agree_rate, disagree_rate);
                 const agree_className = `bg-blue-400 h-[20px] tooltip tooltip-open transition-all duration-700`;
                 const disagree_className = `bg-red-400 h-[20px] tooltip tooltip-open transition-all duration-700`;
                 return (<div key={idx} className="bg-base-100 drop-shadow-2xl  rounded-2xl m-2 mb-3">
