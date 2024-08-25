@@ -17,13 +17,13 @@ const COLORS = [
 ];
 
 export default function ShowResultPage() {
-    const [current_data, set_current_data] = useState({});
+    const [current_data, set_current_data] = useState<any>({});
     const [gender, setGender] = useState(0);
     const [grade, setGrade] = useState("");
     const [age, setAge] = useState(0);
-    const [datas, setDatas] = useState({});
+    const [datas, setDatas] = useState<{ [key: string]: any }>({});
     const [page, setPage] = useState(2);
-    const [questions, setQuestions] = useState([]);
+    const [questions, setQuestions] = useState<any>([]);
 
     useEffect(() => {
         supaclient.from('questions').select('*').then(({ data, error }) => {
@@ -304,7 +304,7 @@ function get_chart(data: any) {
     return <PieChart width={800} height={600} >
         <Legend layout="vertical" verticalAlign="middle" align="left" />
         <Pie data={current_data} dataKey={"value"} cx="50%" cy="50%" outerRadius={200} label >
-            {current_data.map((_, index) => {
+            {current_data.map((_: any, index: number) => {
                 return <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             })}
         </Pie>
