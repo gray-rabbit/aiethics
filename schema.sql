@@ -16,7 +16,9 @@ CREATE TABLE IF NOT EXISTS "public"."participants" (
     "region" "text" NOT NULL DEFAULT '결측',
     "schoolname" "text" ,
     "age" int8 not null default 1,
-    "age_raw" "text"
+    "age_raw" "text",
+    "result_type" text not null
+
 );
 CREATE TABLE IF NOT EXISTS "public"."answers" (
     "id" serial NOT NULL,
@@ -27,6 +29,18 @@ CREATE TABLE IF NOT EXISTS "public"."answers" (
     "user_id" serial REFERENCES "public"."participants"("id"),
     "code" "text"
 );
+
+
+create view all_view as
+select a.gender, a.grade,a.age,   b.question_id, b.answer, count(b.answer)
+from participants a left join answers b
+on(a.id=b.user_id)
+group by a.gender, a.grade,a.age, a.grade, question_id, b.answer
+order by a.gender, a.grade,a.age, a.grade, question_id, b.answer;
+
+create view all_types as
+select gender, grade, age, result_type, count(result_type) from participants
+group by gender, grade,age, result_type;
 
 
 --          API URL: http://127.0.0.1:54321

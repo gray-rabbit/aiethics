@@ -15,6 +15,7 @@ import { useUserStore } from "@/stores/userStore";
 import { Answer, useAnswerStore } from "@/stores/answerStore";
 import { useRouter } from "next/navigation";
 
+
 interface Question {
     question_num: number;
     question_text: string;
@@ -84,7 +85,6 @@ export default function ApplyPage() {
                 const answerData = {} as {
                     [key: number]: { question_num: number, answer: number, reason: string }
                 };
-
                 //초기화 코드 나중에 다시 되살려야함
                 data.map((k: Question) => {
                     answerData[k.question_num] = {
@@ -94,7 +94,6 @@ export default function ApplyPage() {
                         // answer: Math.floor(Math.random() * 2) + 1,
                         reason: ""
                     }
-                    console.log(k.question_num);
                 })
                 update(answerData);
                 console.log(answerData);
@@ -107,9 +106,6 @@ export default function ApplyPage() {
     }, [update]);
 
     useEffect(() => {
-        // console.log(user);
-        // console.log(answer);
-
         getQuestions();
     }, [getQuestions])
 
@@ -140,8 +136,7 @@ export default function ApplyPage() {
                 else if (user.age === "40대") age_fixed = 41
                 else if (user.age === "50대") age_fixed = 51
                 else if (user.age === "60대") age_fixed = 61
-
-                if (user.grade === "초등학생") age_fixed += 8
+                if (user.grade === "초등학생") age_fixed += 7
                 else if (user.grade === "중학생") age_fixed += 13
                 else if (user.grade === "고등학생") age_fixed += 16
 
@@ -151,7 +146,8 @@ export default function ApplyPage() {
                     region: region,
                     schoolname: schoolName,
                     age: age_fixed,
-                    age_raw: age
+                    age_raw: age,
+                    result_type: judge(answer)
                 }).select("id");
                 if (error) {
                     // TODO: 에러 대응코드 필요하다.
@@ -269,4 +265,43 @@ function StateDisplayer({ answers, current, setCurrent }: { answers: { [key: num
         })
         }
     </div >
+}
+
+//판별 논리식
+function judge(object: { [key: number]: Answer }) {
+    const result = []
+    const score_result = [];
+    let temp = 0; //임시변수
+    //1~3번은 찬성이면 사회공공선(S)+1점  반대면 인간존엄성(H)  -1점
+    for (let i = 1; i < 4; i++) {
+        if (object[i].answer === 1) temp++;
+        else temp--;
+    }
+    score_result.push(temp);
+    if (temp > 0) result.push("S");
+    else result.push("H");
+
+    //4~6번은 찬성이면 기술합목적성(T)+1점  반대면 사회공공선(S)  -1점
+    temp = 0;
+    for (let i = 4; i < 7; i++) {
+        if (object[i].answer === 1) temp++;
+        else if (object[i].answer === 2) temp--;
+    }
+    score_result.push(temp);
+    if (temp > 0) result.push("T");
+    else result.push("S");
+
+    //7~9번은 찬성이면 기술합목적성(T)+1점  반대면 인간존엄성(H)  -1점
+    temp = 0;
+    for (let i = 7; i < 10; i++) {
+        if (object[i].answer === 1) temp++;
+        else if (object[i].answer === 2) temp--;
+    }
+    score_result.push(temp);
+    if (temp > 0) result.push("T");
+    else result.push("H");
+
+    console.log(result, score_result);
+    const result_str = result.join("");
+    return result_str;
 }

@@ -1,14 +1,77 @@
 "use client";
+import { useAnswerStore } from "@/stores/answerStore";
 import { Grade, Region, useUserStore } from "@/stores/userStore";
 import { useRouter } from "next/navigation";
 import { FormEvent, MouseEventHandler, useState } from "react";
 
 export default function SetInfoPage() {
     const { user, update } = useUserStore();
+    const [start, setStart] = useState(false);
+    const { answer, update: answer_update } = useAnswerStore();
     const router = useRouter();
     const click_handler = () => {
         // TODO: 데이터 확인과정 필요함
-        router.push("/apply");
+
+        // 모든 데이터를 초기화 한다. 
+        answer_update({
+            1: {
+                question_num: 1,
+                answer: -1,
+                reason: ""
+            },
+            2: {
+                question_num: 2,
+                answer: -1,
+                reason: ""
+            },
+            3: {
+                question_num: 3,
+                answer: -1,
+                reason: ""
+            },
+            4: {
+                question_num: 4,
+                answer: -1,
+                reason: ""
+            },
+            5: {
+                question_num: 5,
+                answer: -1,
+                reason: ""
+            },
+            6: {
+                question_num: 6,
+                answer: -1,
+                reason: ""
+            },
+            7: {
+                question_num: 7,
+                answer: -1,
+                reason: ""
+            },
+            8: {
+                question_num: 8,
+                answer: -1,
+                reason: ""
+            },
+            9: {
+                question_num: 9,
+                answer: -1,
+                reason: ""
+            },
+        })
+        setStart(true);
+    }
+
+    if (start) {
+        let bool = true;
+        Object.keys(answer).forEach((key) => {
+            if (answer[Number(key)].answer !== -1) bool = false;
+        })
+        if (bool) {
+            router.push("/apply");
+            return null;
+        }
     }
     return <div className="flex justify-center h-screen items-center ">
         {/* 남자여자 */}
@@ -21,7 +84,6 @@ export default function SetInfoPage() {
                     <button className={"btn " + (user.gender === "여자" ? "btn-primary" : "btn-outline")} onClick={() => update({ ...user, gender: "여자" })}>여자</button>
                 </div>
             </div>
-
             <div className="mt-5" >
                 <p>지역을 선택하세요.</p>
                 <div className="w-full  flex-wrap flex gap-3 ">

@@ -20,32 +20,37 @@ export default function ResultPage() {
             age: "20대",
         })
     }
-    const { result, score_result, result_type, human_type } = judge(answer);
+    const { result_str, score_result, result_type, human_type } = judge(answer);
     return <>
         <button className="btn" onClick={test}>음</button>
         <div className="grid grid-cols-12">
-            <div className="col-span-4 flex flex-col justify-center items-center">
-                <div className="card bg-base-200 shadow-xl">
-                    <figure>
-                        <Image src={`/assets/old/personality/${human_type}.svg`} width={200} height={0} alt={"human_type"} />
+            <div className="col-span-4 flex flex-col justify-center items-center ">
+                <div className="card bg-base-200 shadow-xl border-2">
+                    <div className="card-header bg-base-100">
+                        <p className="text-2xl text-center p-3">당신의 도시계획 성향은</p>
+                    </div>
+                    <figure className="px-5  bg-base-100">
+                        <Image src={`/assets/old/personality/${human_type}.svg`} width={300} height={500} alt={"human_type"} className="bg-white" />
                     </figure>
-                    <div className="card-body">
-                        <div className="card-title">
+                    <div className="card-body bg-base-100 p-2">
+                        <div className="card-title text-center block">
                             <p>{result_type}</p>
+                            <p>시장님</p>
+                            <p>{result_str}</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className="col-span-8 flex flex-col justify-center items-cneter">
+            <div className="col-span-8 flex flex-col justify-center items-cneter mx-2">
                 {score_result.map((score, index) => {
                     console.log(score);
                     if (score > 0) {
-                        return <div key={index} className="flex justify-center items-center">
+                        return <div key={index} className="flex justify-center items-center border-2 rounded-2xl">
                             <Image key={index} src={`/assets/old/scale/s${(index + 1).toString()}_agreeisgreater.svg`} width={550} height={300} alt={"balance" + index.toString()} />
                         </div>
                     }
                     else {
-                        return <div key={index} className="flex justify-center items-center">
+                        return <div key={index} className="flex justify-center items-center border-2 rounded-2xl">
                             <Image key={index} src={`/assets/old/scale/s${(index + 1).toString()}_oppositeisgreater.svg`} width={550} height={300} alt={"balance" + index.toString()} />
                         </div>
                     }
@@ -95,44 +100,44 @@ function judge(object: { [key: number]: Answer }) {
     let human_type = "";
     switch (result_str) {
         case "HSH":
-            result_type = "인간중시 S형";
+            result_type = "인간중시 S형 ";
             human_type = HUMAN_TYPE.인간중시;
             break;
         case "HTH":
-            result_type = "인간중시 T형";
+            result_type = "인간중시 T형 ";
             human_type = HUMAN_TYPE.인간중시;
 
             break;
         case "SSH":
-            result_type = "사회중시 H형";
+            result_type = "사회중시 H형 ";
             human_type = HUMAN_TYPE.사회중시;
 
             break;
         case "SST":
-            result_type = "사회중시 T형";
+            result_type = "사회중시 T형 ";
             human_type = HUMAN_TYPE.사회중시;
 
             break;
         case "STT":
-            result_type = "기술중시 S형";
+            result_type = "기술중시 S형 ";
             human_type = HUMAN_TYPE.기술중시;
             break;
         case "HTT":
-            result_type = "기술중시 H형";
+            result_type = "기술중시 H형 ";
             human_type = HUMAN_TYPE.기술중시;
             break;
         case "HST":
-            result_type = "균형중시 A형";
+            result_type = "균형중시 A형 ";
             human_type = HUMAN_TYPE.균형중시;
             break;
         case "STH":
-            result_type = "균형중시 B형";
+            result_type = "균형중시 B형 ";
             human_type = HUMAN_TYPE.균형중시;
             break;
         default:
             result_type = "타입을 찾을 수 없습니다.";
             break;
     }
-    return { result, score_result, human_type, result_type };
+    return { result_str, score_result, human_type, result_type };
 
 }

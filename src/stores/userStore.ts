@@ -51,4 +51,4 @@ const useUserStore = create<UserStore>(set => {
     }
 })
 
-export { useUserStore, Grade, Region } 
+export { useUserStore, Grade, Region, type User } 
