@@ -12,6 +12,14 @@ interface AnswerStore {
     update: (answer: { [key: number]: Answer }) => void
 }
 
+interface Question {
+    question_num: number;
+    question_text: string;
+    positive_text: string;
+    negative_text: string;
+}
+
+
 const useAnswerStore = create<AnswerStore>((set) => ({
     answer: {
         1: {
@@ -66,4 +74,4 @@ const useAnswerStore = create<AnswerStore>((set) => ({
     },
 }))
 
-export { useAnswerStore, type Answer }
+export { useAnswerStore, type Answer, type Question }

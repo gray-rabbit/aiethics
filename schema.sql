@@ -6,19 +6,16 @@ CREATE TABLE IF NOT EXISTS "public"."questions" (
     "positive_text" "text" NOT NULL,
     "negative_text" "text" NOT NULL
 );
-
-
 CREATE TABLE IF NOT EXISTS "public"."participants" (
     "id" serial primary key,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "gender" int8 not null default 1,
     "grade" "text",
     "region" "text" NOT NULL DEFAULT '결측',
-    "schoolname" "text" ,
+    "schoolname" "text",
     "age" int8 not null default 1,
     "age_raw" "text",
     "result_type" text not null
-
 );
 CREATE TABLE IF NOT EXISTS "public"."answers" (
     "id" serial NOT NULL,
@@ -29,20 +26,47 @@ CREATE TABLE IF NOT EXISTS "public"."answers" (
     "user_id" serial REFERENCES "public"."participants"("id"),
     "code" "text"
 );
-
-
 create view all_view as
-select a.gender, a.grade,a.age,   b.question_id, b.answer, count(b.answer)
-from participants a left join answers b
-on(a.id=b.user_id)
-group by a.gender, a.grade,a.age, a.grade, question_id, b.answer
-order by a.gender, a.grade,a.age, a.grade, question_id, b.answer;
-
+select a.gender,
+    a.grade,
+    a.age,
+    b.question_id,
+    b.answer,
+    count(b.answer)
+from participants a
+    left join answers b on(a.id = b.user_id)
+group by a.gender,
+    a.grade,
+    a.age,
+    a.grade,
+    question_id,
+    b.answer
+order by a.gender,
+    a.grade,
+    a.age,
+    a.grade,
+    question_id,
+    b.answer;
 create view all_types as
-select gender, grade, age, result_type, count(result_type) from participants
-group by gender, grade,age, result_type;
-
-
+select gender,
+    grade,
+    age,
+    result_type,
+    count(result_type)
+from participants
+group by gender,
+    grade,
+    age,
+    result_type;
+create view all_opinions as
+select a.gender,
+    a.age,
+    a.grade,
+    b.question_id,
+    b.answer,
+    b.answer_text
+from participants a
+    left join answers b on a.id = b.user_id;
 --          API URL: http://127.0.0.1:54321
 --      GraphQL URL: http://127.0.0.1:54321/graphql/v1
 --   S3 Storage URL: http://127.0.0.1:54321/storage/v1/s3
