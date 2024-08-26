@@ -58,6 +58,7 @@ group by gender,
     grade,
     age,
     result_type;
+    
 create view all_opinions as
 select a.gender,
     a.age,
