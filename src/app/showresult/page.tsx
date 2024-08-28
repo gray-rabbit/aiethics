@@ -244,7 +244,7 @@ export default function ShowResultPage() {
                             d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                         />
                     </svg>
-                    <span className="btm-nav-label">기술(문항) 통계</span>
+                    <span className="btm-nav-label">문항 통계</span>
                 </button>
                 <button
                     className={
@@ -486,6 +486,11 @@ function OpinionDisplayer(
             setIdx(idx + 1);
         }
     }
+    function prev_question() {
+        if (idx > 0) {
+            setIdx(idx - 1);
+        }
+    }
     function get_opinion(start_idx: number) {
         supaclient
             .from("all_opinions")
@@ -507,6 +512,33 @@ function OpinionDisplayer(
     }
     return (
         <>
+            <div className="flex  border-2 p-2 border-black rounded-2xl mx-8 my-2 drop-shadow-xl">
+                <div className="left">
+                    <button className={"btn btn-primary h-full"} disabled={idx == 0} onClick={prev_question}>
+                        이전질문
+                    </button>
+                </div>
+                <div className="center flex-1 flex-col items-center justify-center text-xl px-2">
+                    <div className="badge mx-2 inline">질문</div>
+                    <span>
+                        {questions[idx].question_text}
+                    </span>
+                    <div className="flex gap-2 ">
+                        <div className="border-2 flex-1 border-blue-300 rounded-lg">
+                            <div className="badge badge-success mx-2">찬성</div>
+                            <span>{questions[idx].positive_text}</span></div>
+                        <div className="border-2 flex-1 border-red-300 rounded-lg" >
+                            <div className="badge badge-error mx-2">반대</div>
+                            <span>{questions[idx].negative_text}</span></div>
+                    </div>
+
+                </div>
+                <div className="right text-center ">
+                    <button className={"btn btn-primary h-full "} disabled={questions.length - 1 == idx} onClick={next_question}>
+                        다음질문
+                    </button>
+                </div>
+            </div>
             <div className="grid grid-cols-3">
                 {opinion.map((v, idx) => {
                     return <div key={idx} className="rounded-xl p-1 col-span-1 border-2">
