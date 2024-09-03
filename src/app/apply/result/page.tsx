@@ -22,7 +22,6 @@ export default function ResultPage() {
     }
     const { result_str, score_result, result_type, human_type } = judge(answer);
     return <>
-        <button className="btn" onClick={test}>음</button>
         <div className="grid grid-cols-12">
             <div className="col-span-4 flex flex-col justify-center items-center ">
                 <div className="card bg-base-200 shadow-xl border-2">

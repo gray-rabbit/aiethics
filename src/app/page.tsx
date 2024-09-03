@@ -10,8 +10,13 @@ export default function Home() {
       {/* <Image className="absolute top-0" src={test} alt="test" /> */}
 
       <div className="bg-[url('/assets/old/KakaoTalk_bg.svg')] h-[calc(100vh-70px)] flex justify-center items-center flex-col" >
-        <div className="text-center h-[200px] w-[300px] drop-shadow-lg ">
+        <div className="text-center h-[200px] w-[360px] drop-shadow-lg ">
           <h1 className="text-4xl">AI 도시를 부탁해</h1>
+          <br/>
+          <div className="text text-sm center ">
+            <p> 당신은 <span className="font-bold">AI 도시 시장님</span> 입니다.</p>
+            <p> AI와 관련된 다양한 상황에서 <span className="font-bold">당신의 입장을 선택</span>해주세요.</p>
+          </div>
         </div>
         <div className="flex justify-center items-center">
           <Link href="/setinfo">
